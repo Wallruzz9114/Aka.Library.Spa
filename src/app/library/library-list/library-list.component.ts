@@ -1,14 +1,14 @@
+import { SelectionModel } from '@angular/cdk/collections';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
 import { LibrariesService } from '../../services/libraries.service';
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Library } from '../../shared/library';
-import { MatTableDataSource, MatSort } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-library-list',
   templateUrl: './library-list.component.html',
-  styleUrls: ['./library-list.component.scss']
+  styleUrls: ['./library-list.component.scss'],
 })
 export class LibraryListComponent implements OnInit, AfterViewInit {
   displayedColumns = ['libraryId', 'name', 'city'];
@@ -19,14 +19,17 @@ export class LibraryListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
-    private libraryService: LibrariesService) { }
+    private libraryService: LibrariesService
+  ) {}
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   ngOnInit() {
-    this.libraryService.getLibraries().subscribe(data => this.dataSource.data = data);
+    this.libraryService
+      .getLibraries()
+      .subscribe((data) => (this.dataSource.data = data));
   }
 
   selectRow(library: Library) {
@@ -40,5 +43,4 @@ export class LibraryListComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
   }
-
 }

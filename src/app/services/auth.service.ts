@@ -1,13 +1,12 @@
-import { environment } from './../../environments/environment';
-import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Member } from '../members/interfaces/member';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Member } from '../members/interfaces/member';
+import { environment } from './../../environments/environment';
 
 @Injectable()
 export class AuthService {
-
   apiUrl: string;
   isAuthenticated: boolean;
   currentMember: Member = null;
@@ -24,18 +23,18 @@ export class AuthService {
   }
 
   login(memberId: number): Observable<Member> {
-    return this.http.get<Member>(`${this.apiUrl}/${memberId}`)
-      .pipe(
-        tap(res => {
-          this.isAuthenticated = res !== null;
-          this.currentMember = res;
-        })
-      );
+    return this.http.get<Member>(`${this.apiUrl}/${memberId}`).pipe(
+      tap((res) => {
+        this.isAuthenticated = res !== null;
+        this.currentMember = res;
+        this.loggedIn.next(true);
+      })
+    );
   }
 
   logout(): void {
     this.isAuthenticated = false;
     this.currentMember = null;
+    this.loggedIn.next(false);
   }
-
 }
